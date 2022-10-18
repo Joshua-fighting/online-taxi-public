@@ -1,13 +1,15 @@
-package com.pheonix.api_passenger;
+package com.pheonix.serviceverificationcode;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication
 @EnableDiscoveryClient
-public class ApiPassengerApplication {
+@SpringBootApplication
+public class ServiceVerificationcodeApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(ApiPassengerApplication.class);
+        SpringApplication.run(ServiceVerificationcodeApplication.class, args);
     }
+
 }
