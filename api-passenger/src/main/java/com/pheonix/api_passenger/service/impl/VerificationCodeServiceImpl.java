@@ -4,6 +4,7 @@ import com.pheonix.api_passenger.client.ServiceVerificationCodeClient;
 import com.pheonix.api_passenger.service.VerificationCodeService;
 import com.pheonix.internal_common.dto.ResponseResult;
 import com.pheonix.internal_common.response.NumberCodeResponse;
+import com.pheonix.internal_common.response.TokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     private String verificationCodePrefix = "passenger-verification-code-";
 
+    /**
+     * 生成验证码
+     * @param passengerPhone
+     * @return
+     */
     @Override
     public ResponseResult generatorCode(String passengerPhone) {
         //调用验证码，获取验证码
@@ -39,5 +45,25 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         //通过短信服务商，将对应的验证码发送到手机上
         //TODO
         return ResponseResult.success();
+    }
+
+    /**
+     * 校验验证码
+     * @param passengerPhone
+     * @param verificationCode
+     * @return
+     */
+    public ResponseResult checkCode(String passengerPhone,String verificationCode){
+        //根据手机号，去redis读取验证码
+        log.info("根据手机号，去redis读取验证码");
+
+        //检验验证码
+
+        //判断原来是否有用户，并进行对应的处理
+
+        //颁发令牌
+
+        TokenResponse tokenResponse = new TokenResponse("token value");
+        return ResponseResult.success(tokenResponse);
     }
 }
