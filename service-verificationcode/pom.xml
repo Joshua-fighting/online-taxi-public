@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.pheonix</groupId>
-    <artifactId>service-verificationcode</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>service-verificationcode</name>
-    <description>Demo project for Spring Boot</description>
-
     <parent>
         <artifactId>online-taxi-public</artifactId>
         <groupId>com.pheonix</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
-    </properties>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.pheonix</groupId>
+    <artifactId>service-verificationcode</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>service-verificationcode</name>
 
     <dependencies>
         <dependency>
@@ -39,15 +31,16 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
         <!--nacos-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <version>2021.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.pheonix</groupId>
+            <artifactId>internal-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

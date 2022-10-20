@@ -1,7 +1,9 @@
 package com.pheonix.api_passenger.service;
 
 
+import com.pheonix.internal_common.dto.ResponseResult;
+
 public interface VerificationCodeService {
 
-    String generatorCode(String passengerPhone);
+    ResponseResult generatorCode(String passengerPhone);
 }
