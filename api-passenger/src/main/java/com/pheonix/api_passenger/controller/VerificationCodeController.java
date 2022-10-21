@@ -1,6 +1,6 @@
 package com.pheonix.api_passenger.controller;
 
-import com.pheonix.api_passenger.request.VerificationCodeDTO;
+import com.pheonix.internal_common.request.VerificationCodeDTO;
 import com.pheonix.api_passenger.service.VerificationCodeService;
 import com.pheonix.internal_common.dto.ResponseResult;
 import lombok.extern.slf4j.Slf4j;

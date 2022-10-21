@@ -1,4 +1,4 @@
-package com.pheonix.api_passenger.request;
+package com.pheonix.internal_common.request;
 
 import lombok.Data;
 
