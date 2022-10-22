@@ -11,6 +11,7 @@ import com.pheonix.internal_common.request.VerificationCodeDTO;
 import com.pheonix.internal_common.response.NumberCodeResponse;
 import com.pheonix.internal_common.response.TokenResponse;
 import com.pheonix.internal_common.utils.JwtUtils;
+import com.pheonix.internal_common.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -35,11 +36,6 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Autowired
     ServicePassengerUserClient servicePassengerUserClient;
 
-    //乘客验证码的前缀
-    private String verificationCodePrefix = "passenger-verification-code-";
-
-    //验证码的前缀
-    private String tokenPrefix = "token-";
 
     /**
      * 生成验证码
@@ -55,7 +51,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         log.info("numberCode = " + numberCode);
         //存入redis
         //key、value、过期时间
-        String key = generateKeyByPhone(passengerPhone);
+        String key = RedisUtils.generateKeyByPhone(passengerPhone);
         stringRedisTemplate.opsForValue().set(key,String.valueOf(numberCode),2, TimeUnit.MINUTES);
 
         //通过短信服务商，将对应的验证码发送到手机上
@@ -74,7 +70,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         log.info("根据手机号，去redis读取验证码");
 
         //检验验证码
-        String key = generateKeyByPhone(passengerPhone);
+        String key = RedisUtils.generateKeyByPhone(passengerPhone);
         String value = stringRedisTemplate.opsForValue().get(key);
         if(StringUtils.isBlank(value)){
             return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_EXPIRED.getCode(),CommonStatusEnum.VERIFICATION_CODE_EXPIRED.getValue());
@@ -91,24 +87,10 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         map.put(JwtUtils.JWT_KEY_IDENTITY, IdentityConstant.PASSENGER_IDENTITY);
         String token = JwtUtils.generatorToken(map);
         //将Token存入redis中
-        stringRedisTemplate.opsForValue().set(genetatorTokenKey(passengerPhone,IdentityConstant.PASSENGER_IDENTITY),token,7,TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(RedisUtils.genetatorTokenKey(passengerPhone,IdentityConstant.PASSENGER_IDENTITY),token,7,TimeUnit.DAYS);
         //响应
         TokenResponse tokenResponse = new TokenResponse(token);
         return ResponseResult.success(tokenResponse);
     }
 
-    //生成redis的key方法
-     private String generateKeyByPhone(String passengerPhone){
-        return verificationCodePrefix + passengerPhone;
-     }
-
-    /**
-     * 根据手机号和身份标识，生成Token
-     * @param phone
-     * @param identity
-     * @return
-     */
-    private String genetatorTokenKey(String phone,String identity){
-        return tokenPrefix + phone + "-" + identity;
-    }
 }
