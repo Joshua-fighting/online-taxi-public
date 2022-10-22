@@ -1,11 +1,16 @@
 package com.pheonix.api_passenger.service.impl;
 
+import com.pheonix.api_passenger.client.ServicePassengerUserClient;
 import com.pheonix.api_passenger.client.ServiceVerificationCodeClient;
 import com.pheonix.api_passenger.service.VerificationCodeService;
 import com.pheonix.internal_common.constant.CommonStatusEnum;
+import com.pheonix.internal_common.constant.IdentityConstant;
 import com.pheonix.internal_common.dto.ResponseResult;
+import com.pheonix.internal_common.dto.TokenResult;
+import com.pheonix.internal_common.request.VerificationCodeDTO;
 import com.pheonix.internal_common.response.NumberCodeResponse;
 import com.pheonix.internal_common.response.TokenResponse;
+import com.pheonix.internal_common.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -25,7 +32,14 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    ServicePassengerUserClient servicePassengerUserClient;
+
+    //乘客验证码的前缀
     private String verificationCodePrefix = "passenger-verification-code-";
+
+    //验证码的前缀
+    private String tokenPrefix = "token-";
 
     /**
      * 生成验证码
@@ -69,10 +83,17 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
             return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERROR.getValue());
         }
         //判断原来是否有用户，并进行对应的处理
-
+        log.info("验证码校验通过，检查系统中是否存在该用户");
+        servicePassengerUserClient.loginOrRegist(new VerificationCodeDTO().setPassengerPhone(passengerPhone));
         //颁发令牌
-
-        TokenResponse tokenResponse = new TokenResponse("token value");
+        Map<String,String> map = new HashMap<>();
+        map.put(JwtUtils.JWT_KEY_PHONE,passengerPhone);
+        map.put(JwtUtils.JWT_KEY_IDENTITY, IdentityConstant.PASSENGER_IDENTITY);
+        String token = JwtUtils.generatorToken(map);
+        //将Token存入redis中
+        stringRedisTemplate.opsForValue().set(genetatorTokenKey(passengerPhone,IdentityConstant.PASSENGER_IDENTITY),token,7,TimeUnit.DAYS);
+        //响应
+        TokenResponse tokenResponse = new TokenResponse(token);
         return ResponseResult.success(tokenResponse);
     }
 
@@ -80,4 +101,14 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
      private String generateKeyByPhone(String passengerPhone){
         return verificationCodePrefix + passengerPhone;
      }
+
+    /**
+     * 根据手机号和身份标识，生成Token
+     * @param phone
+     * @param identity
+     * @return
+     */
+    private String genetatorTokenKey(String phone,String identity){
+        return tokenPrefix + phone + "-" + identity;
+    }
 }

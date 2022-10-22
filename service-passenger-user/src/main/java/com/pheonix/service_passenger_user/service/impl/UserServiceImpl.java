@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,16 @@ public class UserServiceImpl implements UserService {
         Map<String,Object> map = new HashMap<>();
         map.put("passenger_phone",passengerPhone);
         List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);
-        if(CollectionUtils.isEmpty(passengerUsers)){
-            return ResponseResult.fail(CommonStatusEnum.RESULT_PARAM_IS_EMPTY.getCode(),CommonStatusEnum.RESULT_PARAM_IS_EMPTY.getValue());
-        }
         //判断用户信息是否存在
+        if(CollectionUtils.isEmpty(passengerUsers)){
+            //新增用户
+            passengerUserMapper.insert(new PassengerUser().setPassengerPhone(passengerPhone)
+                    .setPassengerName("Joshua").setPassengerGender(1).setState(0).setGmtCreate(LocalDateTime.now())
+                    .setGmtModified(LocalDateTime.now()));
+            return ResponseResult.fail(CommonStatusEnum.RESULT_PARAM_IS_EMPTY.getCode(),CommonStatusEnum.RESULT_PARAM_IS_EMPTY.getValue());
+        }else{
+
+        }
 
 
         return ResponseResult.success();
