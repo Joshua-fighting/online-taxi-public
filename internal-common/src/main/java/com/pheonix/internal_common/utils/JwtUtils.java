@@ -3,12 +3,10 @@ package com.pheonix.internal_common.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.pheonix.internal_common.dto.TokenResult;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +20,14 @@ public class JwtUtils {
     //乘客是1，用户是2
     public static final String JWT_KEY_IDENTITY = "identity";
 
+    public static final String JWT_KEY_TOKEN_CONSTANT = "tokenType";
+
+    public static final String JWT_TOKEN_TIME = "tokenTime";
+
     //生成Token
     public static String generatorToken(Map<String,String> map){
-        //token过期时间
-        Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DATE,1);
-        Date date = instance.getTime();
+        //防止每次生成的token一样
+        map.put(JWT_TOKEN_TIME,Calendar.getInstance().getTime().toString());
 
         JWTCreator.Builder builder = JWT.create();
         //整合map

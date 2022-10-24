@@ -20,7 +20,7 @@ public class RedisUtils {
      * @param identity
      * @return
      */
-    public static String genetatorTokenKey(String phone,String identity){
-        return tokenPrefix + phone + "-" + identity;
+    public static String genetatorTokenKey(String phone,String identity,String tokenType){
+        return tokenPrefix + phone + "-" + identity + "-" + tokenType;
     }
 }

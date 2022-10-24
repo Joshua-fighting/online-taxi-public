@@ -3,6 +3,7 @@ package com.pheonix.api_passenger.interceptor;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.pheonix.internal_common.constant.TokenConstant;
 import com.pheonix.internal_common.dto.ResponseResult;
 import com.pheonix.internal_common.dto.TokenResult;
 import com.pheonix.internal_common.utils.JwtUtils;
@@ -39,28 +40,14 @@ public class JwtInterceptor implements HandlerInterceptor {
                 String phone = tokenResult.getPhone();
                 String identity = tokenResult.getIdentity();
                 //拼接redis的key值
-                String tokenKey = RedisUtils.genetatorTokenKey(phone, identity);
+                String tokenKey = RedisUtils.genetatorTokenKey(phone, identity, TokenConstant.ACCESS_TOKEN_TYPE);
                 //从redis中取出token
                 String tokenValue = stringRedisTemplate.opsForValue().get(tokenKey);
-                if(StringUtils.isBlank(tokenValue)){
-                    resultString = "token invalid";
+                if(StringUtils.isBlank(tokenValue)||!token.trim().equals(tokenValue.trim())){
+                    resultString = "access token invalid";
                     result = false;
-                }else{
-                    if(!token.trim().equals(tokenValue.trim())){
-                        resultString = "token invalid";
-                        result = false;
-                    }
                 }
             }
-        } catch (SignatureVerificationException e) {
-            resultString = "token sign error";
-            result = false;
-        } catch (TokenExpiredException e) {
-            resultString = "token time out";
-            result = false;
-        } catch (AlgorithmMismatchException e) {
-            resultString = "token algorithmMismatchException";
-            result = false;
         } catch (Exception e){
             resultString = "token invalid";
             result = false;

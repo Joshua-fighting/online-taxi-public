@@ -5,6 +5,7 @@ import com.pheonix.api_passenger.client.ServiceVerificationCodeClient;
 import com.pheonix.api_passenger.service.VerificationCodeService;
 import com.pheonix.internal_common.constant.CommonStatusEnum;
 import com.pheonix.internal_common.constant.IdentityConstant;
+import com.pheonix.internal_common.constant.TokenConstant;
 import com.pheonix.internal_common.dto.ResponseResult;
 import com.pheonix.internal_common.dto.TokenResult;
 import com.pheonix.internal_common.request.VerificationCodeDTO;
@@ -85,11 +86,16 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         Map<String,String> map = new HashMap<>();
         map.put(JwtUtils.JWT_KEY_PHONE,passengerPhone);
         map.put(JwtUtils.JWT_KEY_IDENTITY, IdentityConstant.PASSENGER_IDENTITY);
-        String token = JwtUtils.generatorToken(map);
+        map.put(JwtUtils.JWT_KEY_TOKEN_CONSTANT, TokenConstant.ACCESS_TOKEN_TYPE);
+        String accessToken = JwtUtils.generatorToken(map);
+        map.put(JwtUtils.JWT_KEY_TOKEN_CONSTANT,TokenConstant.REFRESH_TOKEN_TYPE);
+        String refreshToken = JwtUtils.generatorToken(map);
         //将Token存入redis中
-        stringRedisTemplate.opsForValue().set(RedisUtils.genetatorTokenKey(passengerPhone,IdentityConstant.PASSENGER_IDENTITY),token,7,TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(RedisUtils.genetatorTokenKey(passengerPhone,IdentityConstant.PASSENGER_IDENTITY,TokenConstant.ACCESS_TOKEN_TYPE),accessToken,7,TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(RedisUtils.genetatorTokenKey(passengerPhone,IdentityConstant.PASSENGER_IDENTITY,TokenConstant.REFRESH_TOKEN_TYPE),refreshToken,8,TimeUnit.DAYS);
+
         //响应
-        TokenResponse tokenResponse = new TokenResponse(token);
+        TokenResponse tokenResponse = new TokenResponse(accessToken,refreshToken);
         return ResponseResult.success(tokenResponse);
     }
 

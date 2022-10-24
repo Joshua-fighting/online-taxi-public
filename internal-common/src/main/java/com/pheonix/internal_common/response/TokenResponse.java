@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenResponse {
 
-    private String token;
+    private String accessToken;
 
-    public TokenResponse(String token) {
-        this.token = token;
+    private String refreshToken;
+
+    public TokenResponse(String accessToken,String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }
