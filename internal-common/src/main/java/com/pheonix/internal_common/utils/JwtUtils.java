@@ -3,6 +3,7 @@ package com.pheonix.internal_common.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.pheonix.internal_common.dto.TokenResult;
 
@@ -43,10 +44,17 @@ public class JwtUtils {
 
     //解析Token
     public static TokenResult parseToken(String token){
-        DecodedJWT verify = JWT.require(Algorithm.HMAC256(SIGN)).build().verify(token);
-        String phone = verify.getClaim(JWT_KEY_PHONE).asString();
-        String identity = verify.getClaim(JWT_KEY_IDENTITY).asString();
-
+        String phone = "";
+        String identity = "";
+        try {
+            DecodedJWT verify = JWT.require(Algorithm.HMAC256(SIGN)).build().verify(token);
+            phone = verify.getClaim(JWT_KEY_PHONE).asString();
+            identity = verify.getClaim(JWT_KEY_IDENTITY).asString();
+        } catch (JWTVerificationException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
         return new TokenResult().setPhone(phone).setIdentity(identity);
     }
 

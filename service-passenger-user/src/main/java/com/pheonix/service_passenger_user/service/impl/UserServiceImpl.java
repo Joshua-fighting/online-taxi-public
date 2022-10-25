@@ -2,7 +2,7 @@ package com.pheonix.service_passenger_user.service.impl;
 
 import com.pheonix.internal_common.constant.CommonStatusEnum;
 import com.pheonix.internal_common.dto.ResponseResult;
-import com.pheonix.service_passenger_user.dto.PassengerUser;
+import com.pheonix.internal_common.dto.PassengerUser;
 import com.pheonix.service_passenger_user.mapper.PassengerUserMapper;
 import com.pheonix.service_passenger_user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +39,23 @@ public class UserServiceImpl implements UserService {
 
 
         return ResponseResult.success();
+    }
+
+    /**
+     * 根据手机号查询用户信息
+     * @param passengerPhone
+     * @return
+     */
+    @Override
+    public ResponseResult getUserByPhone(String passengerPhone) {
+        //根据手机号查询用户信息
+        Map<String,Object> map = new HashMap<>();
+        map.put("passenger_phone",passengerPhone);
+        List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);
+        if(CollectionUtils.isEmpty(passengerUsers)){
+            return ResponseResult.fail(CommonStatusEnum.USER_IS_EMPTY.getCode(),CommonStatusEnum.USER_IS_EMPTY.getValue());
+        }else{
+            return ResponseResult.success(passengerUsers.get(0));
+        }
     }
 }

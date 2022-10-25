@@ -1,6 +1,5 @@
-package com.pheonix.service_passenger_user.dto;
+package com.pheonix.internal_common.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -8,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
-@TableName("passenger_user")
 public class PassengerUser {
     private long id;
 
@@ -23,4 +21,6 @@ public class PassengerUser {
     private Integer passengerGender;
 
     private Integer state;
+
+    private String profilePhoto;
 }

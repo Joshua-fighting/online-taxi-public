@@ -5,4 +5,6 @@ import com.pheonix.internal_common.dto.ResponseResult;
 public interface UserService {
 
     ResponseResult loginOrRegister(String passengerPhone);
+
+    ResponseResult getUserByPhone(String passengerPhone);
 }
