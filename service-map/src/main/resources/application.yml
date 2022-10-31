@@ -1,5 +1,14 @@
 server:
   port: 8085
 
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: service-map
+
+# 高德地图对应的 key值
 amap:
   key: 6e630e42d904c7a4a06fa189e16837f1

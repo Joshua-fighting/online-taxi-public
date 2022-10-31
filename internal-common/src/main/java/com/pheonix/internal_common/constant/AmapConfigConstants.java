@@ -12,6 +12,8 @@ public class AmapConfigConstants {
 
     public static final String PATHS = "paths";     //驾车换乘信息，详看高德地图api文档https://lbs.amap.com/api/webservice/guide/api/direction#driving
 
+    public static final String DISTANCE = "distance";
 
+    public static final String DURATION = "duration";
 
 }

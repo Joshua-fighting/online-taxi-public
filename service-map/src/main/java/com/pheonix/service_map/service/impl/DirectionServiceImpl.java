@@ -19,9 +19,8 @@ public class DirectionServiceImpl implements DirectionService {
     @Override
     public ResponseResult driving(ForecastPriceDTO forecastPriceDTO) {
         log.info("根据起点和终点的经纬度获取距离（米）和时长（分钟）");
-        //调用地图接口
-        mapDirectionClient.direction(forecastPriceDTO.getDepLongitude(),forecastPriceDTO.getDepLatitude(),forecastPriceDTO.getDestLongitude(),forecastPriceDTO.getDestLatitude());
-        DirectionResponse directionResponse = new DirectionResponse().setDistance(100).setDuration(5);
-        return ResponseResult.success(directionResponse);
+        //调用第三方地图接口
+        DirectionResponse direction = mapDirectionClient.direction(forecastPriceDTO.getDepLongitude(), forecastPriceDTO.getDepLatitude(), forecastPriceDTO.getDestLongitude(), forecastPriceDTO.getDestLatitude());
+        return ResponseResult.success(direction);
     }
 }

@@ -24,7 +24,6 @@ public class DirectionController {
         if(Objects.isNull(forecastPriceDTO)){
             return ResponseResult.fail(CommonStatusEnum.REQUEST_PARAM_CANNOT_BE_EMPTY.getCode(),CommonStatusEnum.REQUEST_PARAM_CANNOT_BE_EMPTY.getValue());
         }
-        directionService.driving(forecastPriceDTO);
-        return ResponseResult.success();
+        return directionService.driving(forecastPriceDTO);
     }
 }
