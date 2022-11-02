@@ -32,6 +32,17 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <!--当请求方式get，但传的是requestBody时,我们需要注意这种引用在会把请求方式认为是post，导致请求不到，
         这时我们可以引入下面的包，使得在get请求方式下也能传RequestBody-->
         <dependency>

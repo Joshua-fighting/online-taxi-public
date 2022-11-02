@@ -14,7 +14,10 @@ public enum CommonStatusEnum {
     //token问题
     TOKEN_PARAM_ERROR(1101,"token解析错误"),
     //用户问题
-    USER_IS_EMPTY(1200,"查询不到该用户信息")
+    USER_IS_EMPTY(1200,"查询不到该用户信息"),
+
+    //收费问题
+    PRICE_RULE_IS_EMPTY(1500,"计价规则为空")
     ;
 
 
